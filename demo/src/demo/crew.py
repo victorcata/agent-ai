@@ -12,7 +12,8 @@ from langchain_openai import ChatOpenAI
 class Demo():
     """Demo crew"""
 
-    llm = ChatOpenAI(model="llama3", base_url="http://localhost:11434/v1")
+    llm = ChatOpenAI(
+        model="ollama/llama3", api_base="http://localhost:11434")
 
     # Learn more about YAML configuration files here:
     # Agents: https://docs.crewai.com/concepts/agents#yaml-configuration-recommended
@@ -28,14 +29,16 @@ class Demo():
         return Agent(
             config=self.agents_config['researcher'],
             verbose=True,
-            tools=[SerperDevTool()]
+            tools=[SerperDevTool()],
+            llm=self.llm
         )
 
     @agent
     def reporting_analyst(self) -> Agent:
         return Agent(
             config=self.agents_config['reporting_analyst'],
-            verbose=True
+            verbose=True,
+            llm=self.llm
         )
 
     # To learn more about structured task outputs,
